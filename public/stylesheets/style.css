@@ -1,0 +1,21 @@
+.hidden{
+  display: none !important;
+}
+
+.nav-label{
+  padding: 3%;
+  /* background-color: bisque; */
+}
+
+img{
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.story-image{
+  height: 400px;
+}
+
+.title-logo{
+  height: 50px;
+}
