@@ -8,6 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var router = express.Router();
 var chatsRouter = require('./routes/chats');
+var session = require('express-session');
 require('mongoose').connect('mongodb://localhost/sample_db');
 
 var app = express();
@@ -17,11 +18,43 @@ var http = require("http").Server(app)
 app.engine('ejs', engine);
 app.set('view engine', 'ejs');
 
+// Handle sessions
+app.use(session({
+  secret: 'secret',
+  saveUninitialized: true,
+  resave: true
+}));
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// validator
+var expressValidator = require('express-validator');
+app.use(expressValidator({
+  errorFormatter: function(param, msg, value){
+    var namespace = param.split('.')
+    , root = namespace.shift()
+    , formParam = root;
+    while(namespace.length){
+      formParam += '[' + namespace.shift() + ']';
+    }
+    return {
+      param: formParam,
+      msg: msg,
+      value: value
+    };
+  }
+}));
+
+// messages
+app.use(require('connect-flash')());
+app.use(function (req, res, next) {
+  res.locals.messages = require('express-messages')(req, res);
+  next();
+});
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

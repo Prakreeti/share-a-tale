@@ -13,16 +13,11 @@ if (typeof localStorage === "undefined" || localStorage === null) {
   localStorage = new LocalStorage('./scratch');
 }
 
-router.get('/signup', function(req, res){
-  res.render('signup', {errors: [], title: 'SignUp'});
-})
-
 router.post('/signup', upload.single('profile_image'), function(req, res) {
   let name = req.body.name;
   let email = req.body.email;
   let username = req.body.username;
   let password = req.body.password;
-  let password_confirmation = req.body.confirm_password;
   if(req.file){
     var profile_image = req.file.filename;
   }else{
@@ -40,7 +35,7 @@ router.post('/signup', upload.single('profile_image'), function(req, res) {
   // check errors
   let errors = req.validationErrors();
   if(errors){
-    res.render('signup', {errors: errors, title: 'SignUp'});
+    res.render('index', {errors: errors, title: 'SignUp'});
   }
   else{
     const user = new User({
@@ -58,25 +53,20 @@ router.post('/signup', upload.single('profile_image'), function(req, res) {
       console.log(err);
     });
     req.flash('success', 'You are now registered and can login');
-    res.location('/users/signin');
-    res.redirect('/users/signin');
+    res.redirect('/#section-signin');
   }
 });
 
-router.get('/signin', function(req, res){
-  res.render('signin', {errors: [], title: 'SignIn'});
-})
-
 router.post('/signin', function(req, res){
   User.findOne({username: req.body.username}, function(err, user){
-    if(err || user == null){
+    if(user == null){
       req.flash('error', 'Username is not valid');
-      res.redirect('/users/signin');
+      res.redirect('/#section-signin');
     }else{
       bcrypt.compare(req.body.password, user.password, function(err, result){
         if(err || !result) {
           req.flash('error', 'Wrong password entered');
-          res.redirect('/users/signin');
+          res.redirect('/#section-signin');
         }else{
           var JWTToken = jwt.sign({
             email: user.email,
@@ -90,7 +80,6 @@ router.post('/signin', function(req, res){
           user.token = JWTToken;
           user.token_time = Date.now();
           user.save();
-          console.log('token' + JWTToken);
           localStorage.setItem('token', JWTToken);
           res.redirect('/users/list' );
         }
@@ -120,12 +109,12 @@ router.use(function(req, res, next) {
       }
     });
   } else {
-      req.flash('error', 'You need to sign in to access this page.');
-      res.redirect('/users/signin');
+    req.flash('error', 'You need to sign in to access this page.');
+    res.redirect('/#section-signin');
   }
 });
 
-router.post('/list', function(req, res) {
+router.get('/list', function(req, res) {
   res.render('list', {title: 'List'});
 });
 
@@ -133,8 +122,7 @@ router.get('/logout', function (req, res) {
   token = localStorage.getItem('token');
   localStorage.setItem('token', '');
   req.flash('success', 'You are now logged out.');
-  res.location('/users/signin');
-  res.redirect('/users/signin');
+  res.redirect('/#section-signin');
 });
 
 module.exports = router;

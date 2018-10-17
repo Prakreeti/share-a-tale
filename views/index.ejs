@@ -68,6 +68,7 @@
 <section class="pb_section pb_section_v1 bg-light" data-section="signin" id="section-signin">
   <div class="container">
     <div class='row'><div class='col col-lg-7'><h2>Sign In</h2></div></div>
+    <%- messages() %>
     <div class="row">
       <div class='col col-lg-7'>
         <form method='post' action='/users/signin'>
@@ -92,9 +93,12 @@
 
 <section class="pb_section pb_section_v1 text-left cover-bg-opacity-4" style="background-image: url(/images/1900x1200_img_7.jpg)" data-section="signup" id="section-signup">
   <div class="container">
+    <div class='row'><div class='col col-lg-7'><h2 class='font-white'>Sign Up</h2></div></div>
     <form method='post' action='/users/signup' enctype="multipart/form-data">
       <div class='form-group'>
-        <div class='row'><div class='col col-lg-7'><h2 class='font-white'>Sign Up</h2></div></div>
+        <% for (var i=0; i < errors.length; i++){ %>
+          <div class='alert alert-danger'><%= errors[i].msg %></div>
+        <% } %>
         <div class=row>
           <div class='col-lg-6'>
             <label for='name' class='font-white'>Name:</label>
