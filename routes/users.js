@@ -64,7 +64,9 @@ router.post('/signin', function(req, res){
       res.redirect('/#section-signin');
     }else{
       bcrypt.compare(req.body.password, user.password, function(err, result){
-        if(err || !result) {
+        console.log(req.body.password);
+        console.log(result);
+        if(!result) {
           req.flash('error', 'Wrong password entered');
           res.redirect('/#section-signin');
         }else{
@@ -81,7 +83,7 @@ router.post('/signin', function(req, res){
           user.token_time = Date.now();
           user.save();
           localStorage.setItem('token', JWTToken);
-          res.redirect('/users/list' );
+          res.redirect('/users/friends' );
         }
       });
     }
@@ -114,15 +116,22 @@ router.use(function(req, res, next) {
   }
 });
 
-router.get('/list', function(req, res) {
-  res.render('list', {title: 'List'});
+router.get('/friends', function(req, res) {
+  let token = getToken();
+  User.findOne({'email': jwt.decode(token)['email']}, function(err, user) {
+    if (err) throw err;
+    res.render('friends', {title: 'Friends', user: user});
+  });
 });
 
 router.get('/logout', function (req, res) {
-  token = localStorage.getItem('token');
   localStorage.setItem('token', '');
   req.flash('success', 'You are now logged out.');
   res.redirect('/#section-signin');
 });
+
+var getToken = function(){
+  return localStorage.getItem('token');
+}
 
 module.exports = router;
