@@ -24,13 +24,8 @@ router.get("/fetch_chats", (req, res) => {
 })
 
 router.get("/show_chat_window", (req, res) => {
-    //console.log('chat window');
-    res.redirect('/chats/chat_window'); 
-})
-
-router.get("/chat_window", (req, res) => {
-    //console.log('chat window');
     res.render('chat'); 
 })
+
 
 module.exports = router;

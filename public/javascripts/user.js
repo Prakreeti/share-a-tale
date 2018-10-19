@@ -10,7 +10,8 @@ $(document).ready(function(){
             success: function(data){
                 token = data.token;
                 console.log(token);
-                getChatWindow();
+                location.href = "http://localhost:3040/chats/show_chat_window";
+                // getChatWindow();
             }
         });
     });
