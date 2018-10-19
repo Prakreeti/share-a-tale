@@ -3,76 +3,22 @@
   <div class="container">
     <div class="row align-items-center justify-content-end">
       <div class="col-md-6 order-md-1">
-        <h2 class="heading mb-3">Tell-A-Tale</h2>
-        <div class="sub-heading"><p class="mb-5">Everyone has a story to tell.</p>
+        <h2 class="heading mb-3"><p>Tell-A-Tale</p></h2>
+        <div class="sub-heading"><label class="mb-5">Everyone has a story to tell.</label>
         </div>
       </div>  
     </div>
   </div>
 </section>
 
-<section class="pb_section" data-section="testimonials" id="section-testimonials">
-  <div class="multiple-items pb_slide_v1">
-    <div>
-      <a href="#" class="link-block">
-        <img src="/images/story1.jpg" alt="" class="img-fluid story">
-        <div class="slide-text">
-        </div>
-      </a>
-    </div>
-    <div>
-      <a href="#" class="link-block">
-        <img src="/images/story2.jpg" alt="" class="img-fluid story">
-        <div class="slide-text">
-        </div>
-      </a>
-    </div>
-    <div>
-      <a href="#" class="link-block">
-        <img src="/images/story3.jpg" alt="" class="img-fluid story">
-        <div class="slide-text">
-        </div>
-      </a>
-    </div>
-    <div>
-      <a href="#" class="link-block">
-        <img src="/images/story4.jpg" alt="" class="img-fluid story">
-        <div class="slide-text">
-        </div>
-      </a>
-    </div>
-    <div>
-      <a href="#" class="link-block">
-        <img src="/images/story5.jpg" alt="" class="img-fluid story">
-        <div class="slide-text">
-        </div>
-      </a>
-    </div>
-    <div>
-      <a href="#" class="link-block">
-        <img src="/images/1900x1200_img_2.jpg" alt="" class="img-fluid story">
-        <div class="slide-text">
-        </div>
-      </a>
-    </div>
-    <div>
-      <a href="#" class="link-block">
-        <img src="/images/1900x1200_img_3.jpg" alt="" class="img-fluid story">
-        <div class="slide-text">
-        </div>
-      </a>
-    </div>
-  </div>
-</section>
 
-<% if(!user){ %>
   <section class="pb_section pb_section_v1 bg-light" data-section="signin" id="section-signin">
     <div class="container">
       <div class='row'><div class='col col-lg-7'><h2>Sign In</h2></div></div>
-      <%- messages() %>
+     
       <div class="row">
         <div class='col col-lg-7'>
-          <form method='post' action='/users/signin'>
+          <div name='signin-form'>
             <div class='form-group'>
               <label for='username'>Username:</label>
               <input class='form-control' name='username' type='text' placeholder='Username'/>
@@ -82,9 +28,9 @@
               <input class='form-control' name='password' type='password' placeholder='Password'/>
             </div>
             <div class='form-group'>
-              <button class='btn btn-primary' type='submit' name='submit' value='Sign In'>SIGN IN</button>
+              <button class='btn btn-primary signin-submit' value='Sign In'>SIGN IN</button>
             </div>
-          </form> 
+          </div> 
         </div>
         <div class="col col-lg-4">
         </div>
@@ -143,7 +89,7 @@
       </form>
     </div>
   </section>
-<% } %>
+
 
 <section class="pb_section pb_section_v1" data-section="about" id="section-about">
   <div class="container">

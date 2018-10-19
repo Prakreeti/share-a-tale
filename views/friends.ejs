@@ -1,4 +1,31 @@
 <% layout('layout') -%> 
-
-<%= title %>
-<%= user.name %>
+<input type='hidden' value='<%= user.username %>' id='username'>
+<section class="pb_cover_v1 text-left cover-bg-black cover-bg-opacity-4" style="background-image: url(/images/1900x1200_img_7.jpg)" id="section-home">
+  <div class="container">
+    <div class="row align-items-center justify-content-end">
+      <div class="col-lg-3 background-grey">
+        <div class='border-bottom-white'>
+          <div class='row self-profile-chat'>
+            <div class='col-lg-3'><div class="circle-base profile-image-chat"></div></div>
+            <div class='col-lg-6'><%= user.name %></div>
+          </div> 
+        </div>
+        <% if(friends){ %> 
+          <% for (var i=0; i < friends.length; i++){ %>
+            <div class='row user-profile-chat'>
+              <div class='col-lg-3 friends-profile-image'>
+                <div class="circle-base profile-image-chat"></div>
+              </div>
+              <div class='col-lg-9 friends-chat'>
+                <div class='each-friend'><%= friends[i]['name'] %></div>
+              </div>
+            </div>
+          <% } %>
+        <% } %>
+      </div> 
+      <div class="col-lg-9 background-light-grey">
+        qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+      </div>  
+    </div>
+  </div>
+</section>

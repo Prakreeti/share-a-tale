@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
 
 const chatSchema = mongoose.Schema({
-    name: String,
+    to: String,
+    from: String,
     chat: String
+    
 });
 
 var Chat = mongoose.model('Chat', chatSchema);

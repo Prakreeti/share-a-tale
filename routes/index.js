@@ -6,10 +6,20 @@ const jwt = require('jsonwebtoken');
 /* GET home page. */
 router.get('/', function(req, res, next) {
   let token = getToken();
-  if(token){
-    User.findOne({'email': jwt.decode(token)['email']}, function(err, user) {
-      if (err) throw err;
-      res.render('index', { title: 'Tell-A-tale', errors: [], user: user});
+  if (token) {
+    // verifies secret and checks exp
+    jwt.verify(token, 'secret', function(err, decoded) {      
+      if (err) {
+        res.render('index', { title: 'Tell-A-tale', errors: [], user: ''});
+      }
+      else{
+        User.findOne({'email': jwt.decode(token)['email']}, function(err, user) {
+          if (err){
+            res.render('index', { title: 'Tell-A-tale', errors: [], user: ''});
+          }
+          res.render('index', { title: 'Tell-A-tale', errors: [], user: user});
+        });
+      }
     });
   }
   else{

@@ -1,0 +1,50 @@
+/* chat backgrounds */
+.background-grey{
+  background-color: #495057;
+  color: white;
+}
+  
+.background-light-grey{
+  background-color: #ddd;
+}
+
+.each-friend{
+  padding: 1%;
+  min-height: 80px;
+  max-height: 80px;
+}
+
+.friends-detail{
+  padding: 0.5%;
+}
+
+.friends-chat{
+  padding: 1%;
+  min-height: 80px;
+  max-height: 80px;
+}
+
+/* profile-image */
+.circle-base {
+  border-radius: 50%;
+}
+
+.profile-image-chat {
+  width: 50px;
+  height: 50px;
+  background: #ccc;
+  border: 3px solid #000;
+}
+
+.self-profile-chat {
+  padding-top: 15%;
+  padding-bottom: 15%;
+}
+
+.border-bottom-white {
+  border-bottom: solid 1px white;
+}
+
+.user-profile-chat{
+  padding-top: 2%;
+}

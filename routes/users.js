@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 // to handle the profile image
 var multer = require('multer');
 var upload = multer({dest:'./uploads'});
+var token_array = [];
 
 if (typeof localStorage === "undefined" || localStorage === null) {
   var LocalStorage = require('node-localstorage').LocalStorage;
@@ -35,7 +36,7 @@ router.post('/signup', upload.single('profile_image'), function(req, res) {
   // check errors
   let errors = req.validationErrors();
   if(errors){
-    res.render('index', {errors: errors, title: 'SignUp'});
+    res.render('index', {errors: errors, title: 'SignUp', user: ''});
   }
   else{
     const user = new User({
@@ -64,8 +65,6 @@ router.post('/signin', function(req, res){
       res.redirect('/#section-signin');
     }else{
       bcrypt.compare(req.body.password, user.password, function(err, result){
-        console.log(req.body.password);
-        console.log(result);
         if(!result) {
           req.flash('error', 'Wrong password entered');
           res.redirect('/#section-signin');
@@ -79,11 +78,13 @@ router.post('/signin', function(req, res){
           {
             expiresIn: '2h'
           });
-          user.token = JWTToken;
-          user.token_time = Date.now();
+          // user.token = JWTToken;
+          // user.token_time = Date.now();
+          username = user.username;
           user.save();
-          localStorage.setItem('token', JWTToken);
-          res.redirect('/users/friends' );
+          token_array[username] = JWTToken;
+          localStorage.setItem('token_array', token_array);
+          res.send({token: JWTToken});
         }
       });
     }
@@ -92,25 +93,32 @@ router.post('/signin', function(req, res){
 
 // route middleware to verify a token
 router.use(function(req, res, next) {
-  let token = req.headers['x-access-token'] || req.headers['authorization'] || localStorage.getItem('token'); 
-  if (token.startsWith('Bearer ')) {
-    // Remove Bearer from string
-    token = token.slice(7, token.length);
+  let token = req.headers['authorization'];
+  console.log(token) ;
+  if(token != undefined){
+    if (token.startsWith('Bearer ')) {
+      // Remove Bearer from string
+      token = token.slice(7, token.length);
+    }
+    var user = req.body['header']['user'];
+    // decode token
+    if ( getToken(user)!= null && getToken(user)==token) {
+      // verifies secret and checks exp
+      jwt.verify(token, 'secret', function(err, decoded) {      
+        if (err) {
+          res.render('index', {errors: '', title: 'SignUp', user: ''});
+        } else {
+          // if everything is good, save to request for use in other routes
+          req.decoded = decoded;    
+          next();
+        }
+      });
+    } else {
+      req.flash('error', 'You need to sign in to access this page.');
+      res.redirect('/#section-signin');
+    }
   }
-
-  // decode token
-  if (token) {
-    // verifies secret and checks exp
-    jwt.verify(token, 'secret', function(err, decoded) {      
-      if (err) {
-        return res.json({ success: false, message: 'Failed to authenticate token.' });    
-      } else {
-        // if everything is good, save to request for use in other routes
-        req.decoded = decoded;    
-        next();
-      }
-    });
-  } else {
+  else {
     req.flash('error', 'You need to sign in to access this page.');
     res.redirect('/#section-signin');
   }
@@ -120,7 +128,10 @@ router.get('/friends', function(req, res) {
   let token = getToken();
   User.findOne({'email': jwt.decode(token)['email']}, function(err, user) {
     if (err) throw err;
-    res.render('friends', {title: 'Friends', user: user});
+    User.find({}, function(err, friends) {
+      if(err) throw err;
+      res.render('friends', {title: 'Friends', user: user, friends: friends});
+    });
   });
 });
 
@@ -130,8 +141,8 @@ router.get('/logout', function (req, res) {
   res.redirect('/#section-signin');
 });
 
-var getToken = function(){
-  return localStorage.getItem('token');
+var getToken = function(username){
+  return localStorage.getItem('token_array')[username];
 }
 
 module.exports = router;
