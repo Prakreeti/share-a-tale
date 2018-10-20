@@ -11,6 +11,12 @@ var chatsRouter = require('./routes/chats');
 var session = require('express-session');
 require('mongoose').connect('mongodb://localhost/sample_db');
 
+tokenHash = {};
+if (typeof localStorage === "undefined" || localStorage === null) {
+  var LocalStorage = require('node-localstorage').LocalStorage;
+  localStorage = new LocalStorage('./scratch');
+}
+
 var app = express();
 var http = require("http").Server(app)
 

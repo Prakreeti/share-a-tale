@@ -24,6 +24,7 @@ router.get("/fetch_chats", (req, res) => {
 })
 
 router.get("/show_chat_window", (req, res) => {
+    console.log(req.body);
     res.render('chat'); 
 })
 

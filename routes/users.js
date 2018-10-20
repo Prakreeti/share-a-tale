@@ -7,12 +7,6 @@ const jwt = require('jsonwebtoken');
 // to handle the profile image
 var multer = require('multer');
 var upload = multer({dest:'./uploads'});
-var token_array = [];
-
-if (typeof localStorage === "undefined" || localStorage === null) {
-  var LocalStorage = require('node-localstorage').LocalStorage;
-  localStorage = new LocalStorage('./scratch');
-}
 
 router.post('/signup', upload.single('profile_image'), function(req, res) {
   let name = req.body.name;
@@ -78,14 +72,14 @@ router.post('/signin', function(req, res){
           {
             expiresIn: '2h'
           });
-          // user.token = JWTToken;
-          // user.token_time = Date.now();
           username = user.username;
           user.save();
-          token_array[username] = JWTToken;
-          localStorage.setItem('token_array', token_array);
+          // storing the token against the username in local storage
+          tokenHash[username] = JWTToken;
+          localStorage.setItem('tokenHash', JSON.stringify(tokenHash));
           res.send({token: JWTToken});
         }
+     
       });
     }
   });
@@ -135,6 +129,15 @@ router.get('/friends', function(req, res) {
   });
 });
 
+router.get('/profile/:username', function(req, res, next) {
+  var username = request.params.username;
+  console.log(username);
+  // findUserByUsername(username, function(error, user) {
+  //   if (error) return next(error);
+  //   return response.render('admin', user);
+  // });
+}); 
+
 router.get('/logout', function (req, res) {
   localStorage.setItem('token', '');
   req.flash('success', 'You are now logged out.');
@@ -142,7 +145,9 @@ router.get('/logout', function (req, res) {
 });
 
 var getToken = function(username){
-  return localStorage.getItem('token_array')[username];
+  var retrievedTokenArray = JSON.parse(localStorage.getItem("tokenHash"));
+  var token = retrievedTokenArray[username];
+  return token
 }
 
 module.exports = router;
