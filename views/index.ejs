@@ -11,85 +11,82 @@
   </div>
 </section>
 
+<section class="pb_section pb_section_v1 bg-light" data-section="signin" id="section-signin">
+  <div class="container">
+    <div class='row'><div class='col col-lg-7'><h2>Sign In</h2></div></div>
+    
+    <div class="row">
+      <div class='col col-lg-7'>
+        <div name='signin-form'>
+          <div class='form-group'>
+            <label for='username'>Username:</label>
+            <input class='form-control' name='username' type='text' placeholder='Username'/>
+          </div>
+          <div class='form-group'>
+            <label for='password'>Password:</label>
+            <input class='form-control' name='password' type='password' placeholder='Password'/>
+          </div>
+          <div class='form-group'>
+            <button class='btn btn-primary signin-submit' value='Sign In'>SIGN IN</button>
+          </div>
+        </div> 
+      </div>
+      <div class="col col-lg-4">
+      </div>
+    </div> 
+  </div>  
+</section>
 
-  <section class="pb_section pb_section_v1 bg-light" data-section="signin" id="section-signin">
-    <div class="container">
-      <div class='row'><div class='col col-lg-7'><h2>Sign In</h2></div></div>
-     
-      <div class="row">
-        <div class='col col-lg-7'>
-          <div name='signin-form'>
-            <div class='form-group'>
-              <label for='username'>Username:</label>
-              <input class='form-control' name='username' type='text' placeholder='Username'/>
-            </div>
-            <div class='form-group'>
-              <label for='password'>Password:</label>
-              <input class='form-control' name='password' type='password' placeholder='Password'/>
-            </div>
-            <div class='form-group'>
-              <button class='btn btn-primary signin-submit' value='Sign In'>SIGN IN</button>
-            </div>
-          </div> 
-        </div>
-        <div class="col col-lg-4">
-        </div>
-      </div> 
-    </div>  
-  </section>
+<section class="pb_section pb_section_v1 text-left cover-bg-opacity-4" style="background-image: url(/images/1900x1200_img_7.jpg)" data-section="signup" id="section-signup">
+  <div class="container">
+    <div class='row'><div class='col col-lg-7'><h2 class='font-white'>Sign Up</h2></div></div>
+    <form method='post' action='/users/signup' enctype="multipart/form-data">
+      <div class='form-group'>
+        <% for (var i=0; i < errors.length; i++){ %>
+          <div class='alert alert-danger'><%= errors[i].msg %></div>
+        <% } %>
+        <div class=row>
+          <div class='col-lg-6'>
+            <label for='name' class='font-white'>Name:</label>
+            <input class='form-control' name='name' type='text' placeholder='Name'/>
+          </div>
+          <div class='col-lg-6'>
+            <label for='email' class='font-white'>Email:</label>
+            <input class='form-control' name='email' type='email' placeholder='Email'/>
+          </div>
+        </div>  
+      </div>
 
-
-  <section class="pb_section pb_section_v1 text-left cover-bg-opacity-4" style="background-image: url(/images/1900x1200_img_7.jpg)" data-section="signup" id="section-signup">
-    <div class="container">
-      <div class='row'><div class='col col-lg-7'><h2 class='font-white'>Sign Up</h2></div></div>
-      <form method='post' action='/users/signup' enctype="multipart/form-data">
-        <div class='form-group'>
-          <% for (var i=0; i < errors.length; i++){ %>
-            <div class='alert alert-danger'><%= errors[i].msg %></div>
-          <% } %>
-          <div class=row>
-            <div class='col-lg-6'>
-              <label for='name' class='font-white'>Name:</label>
-              <input class='form-control' name='name' type='text' placeholder='Name'/>
-            </div>
-            <div class='col-lg-6'>
-              <label for='email' class='font-white'>Email:</label>
-              <input class='form-control' name='email' type='email' placeholder='Email'/>
-            </div>
-          </div>  
-        </div>
-
-        <div class='form-group'>
-          <div class=row>
-            <div class='col-lg-6'>
-              <label for='username' class='font-white'>Username:</label>
-              <input class='form-control' name='username' type='text' placeholder='Username'/>
-            </div>
-            <div class='col-lg-6'>
-              <label for='password' class='font-white'>Password:</label>
-              <input class='form-control' name='password' type='password' placeholder='Password'/>
-            </div>
+      <div class='form-group'>
+        <div class=row>
+          <div class='col-lg-6'>
+            <label for='username' class='font-white'>Username:</label>
+            <input class='form-control' name='username' type='text' placeholder='Username'/>
+          </div>
+          <div class='col-lg-6'>
+            <label for='password' class='font-white'>Password:</label>
+            <input class='form-control' name='password' type='password' placeholder='Password'/>
           </div>
         </div>
-        <div class='form-group'>
-          <div class=row>
-            <div class='col-lg-6'>
-              <label for='confirm_password' class='font-white'>Confirm Password:</label>
-              <input class='form-control' name='confirm_password' type='password' placeholder=' Confirm Password'/>
-            </div>
-            <div class='col-lg-6'>
-              <label class='font-white'>Profile Image</label>
-              <input class='form-control' type='file' name='profile_image'/>
-            </div>
-          </div>  
-        </div>
-        <div class='form-group'>
-          <button class='btn btn-primary' type='submit' name='submit' value='Register'>REGISTER</button>
-        </div>
-      </form>
-    </div>
-  </section>
-
+      </div>
+      <div class='form-group'>
+        <div class=row>
+          <div class='col-lg-6'>
+            <label for='confirm_password' class='font-white'>Confirm Password:</label>
+            <input class='form-control' name='confirm_password' type='password' placeholder=' Confirm Password'/>
+          </div>
+          <div class='col-lg-6'>
+            <label class='font-white'>Profile Image</label>
+            <input class='form-control' type='file' name='profile_image'/>
+          </div>
+        </div>  
+      </div>
+      <div class='form-group'>
+        <button class='btn btn-primary' type='submit' name='submit' value='Register'>REGISTER</button>
+      </div>
+    </form>
+  </div>
+</section>
 
 <section class="pb_section pb_section_v1" data-section="about" id="section-about">
   <div class="container">
@@ -111,14 +108,12 @@
 
 <section class="pb_section" data-section="contact" id="section-contact">
   <div class="container">
-
     <div class="row justify-content-md-center text-center mb-5">
       <div class="col-lg-7">
         <h2 class="mt-0 heading-border-top font-weight-normal">Get In Touch</h2>
         <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
       </div>
     </div>
-
     
     <div class="row">
       <div class="col-md-8 pr-md-5 pr-sm-0 mb-4">

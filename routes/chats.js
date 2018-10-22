@@ -2,31 +2,41 @@ var express = require('express');
 var router = express.Router();
 const Chat = require('../models/chat');
 const User = require('../models/user');
-const jwt = require('jsonwebtoken');
+const AuthFilter = require('../filters/AuthenticationFilter');
+// router.use(AuthFilter);
 
-router.post("/save_chat", async (req, res) => {
-    try {
-        var chat = new Chat(req.body);
-        await chat.save();
-        //Emit the event
-        io.emit("chat_" + chat.to, req.body);
-        res.sendStatus(200);
-    } catch (error) {
-        res.sendStatus(500);
-        console.error(error);
-    }
+router.post("/save_chat", AuthFilter, async (req, res) => {
+  try {
+    var chat = new Chat(JSON.parse(req.body.chat));
+    await chat.save();
+    //Emit the event
+    io.emit("chat_" + chat.to, req.body);
+    res.sendStatus(200);
+  } catch (error) {
+    res.sendStatus(500);
+    console.error(error);
+  }
 })
 
-router.get("/fetch_chats", (req, res) => {
-    Chat.find({}, (error, chats) => {
-        res.send(chats)
-    })
+router.post("/fetch_chats", AuthFilter, (req, res) => {
+  from = req.body.from;
+  to = req.body.to;
+  Chat.find({}, (error, chats) => {
+    res.send(chats)
+  })
 })
 
-router.get("/show_chat_window", (req, res) => {
-    console.log(req.body);
-    res.render('chat'); 
-})
+router.post("/show_chat_window", AuthFilter, (req, res) => {
+  res.statusCode = '200';
+  res.send('You are authorized.');
+});
 
+router.get("/display_chat_window", (req, res) => {
+  username = req.query.user;
+  User.find({ username: { $ne: username } }, function(err, friends) {
+    if(err) throw err;
+    res.render('chat', {username: username, friends: friends});
+  });
+});
 
 module.exports = router;

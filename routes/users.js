@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
+const AuthProcessor = require('../processors/AuthenticationProcessor');
+
 // to handle the profile image
 var multer = require('multer');
 var upload = multer({dest:'./uploads'});
@@ -42,7 +44,6 @@ router.post('/signup', upload.single('profile_image'), function(req, res) {
       profile_image: profile_image,
       created_at: Date.now
     });
-
     User.createUser(user, function(err, user){
       if(err) throw err;
       console.log(err);
@@ -63,69 +64,16 @@ router.post('/signin', function(req, res){
           req.flash('error', 'Wrong password entered');
           res.redirect('/#section-signin');
         }else{
-          var JWTToken = jwt.sign({
-            email: user.email,
-            _id: user._id,
-            status: 'active'
-          },
-          'secret',
-          {
-            expiresIn: '2h'
-          });
           username = user.username;
+          var JWTToken = new AuthProcessor().createToken(user.email, username);
           user.save();
-          // storing the token against the username in local storage
-          tokenHash[username] = JWTToken;
-          localStorage.setItem('tokenHash', JSON.stringify(tokenHash));
+
+          // create namespace for user
+          createNameSpace(username);
           res.send({token: JWTToken});
         }
-     
       });
     }
-  });
-});
-
-// route middleware to verify a token
-router.use(function(req, res, next) {
-  let token = req.headers['authorization'];
-  console.log(token) ;
-  if(token != undefined){
-    if (token.startsWith('Bearer ')) {
-      // Remove Bearer from string
-      token = token.slice(7, token.length);
-    }
-    var user = req.body['header']['user'];
-    // decode token
-    if ( getToken(user)!= null && getToken(user)==token) {
-      // verifies secret and checks exp
-      jwt.verify(token, 'secret', function(err, decoded) {      
-        if (err) {
-          res.render('index', {errors: '', title: 'SignUp', user: ''});
-        } else {
-          // if everything is good, save to request for use in other routes
-          req.decoded = decoded;    
-          next();
-        }
-      });
-    } else {
-      req.flash('error', 'You need to sign in to access this page.');
-      res.redirect('/#section-signin');
-    }
-  }
-  else {
-    req.flash('error', 'You need to sign in to access this page.');
-    res.redirect('/#section-signin');
-  }
-});
-
-router.get('/friends', function(req, res) {
-  let token = getToken();
-  User.findOne({'email': jwt.decode(token)['email']}, function(err, user) {
-    if (err) throw err;
-    User.find({}, function(err, friends) {
-      if(err) throw err;
-      res.render('friends', {title: 'Friends', user: user, friends: friends});
-    });
   });
 });
 
@@ -138,16 +86,12 @@ router.get('/profile/:username', function(req, res, next) {
   // });
 }); 
 
-router.get('/logout', function (req, res) {
-  localStorage.setItem('token', '');
-  req.flash('success', 'You are now logged out.');
-  res.redirect('/#section-signin');
-});
-
-var getToken = function(username){
-  var retrievedTokenArray = JSON.parse(localStorage.getItem("tokenHash"));
-  var token = retrievedTokenArray[username];
-  return token
-}
+var createNameSpace = function(username){
+  var namespace = io.of('/' + username);
+  namespacearray[username] = namespace;
+  namespace.on('connection', function(socket){
+    console.log('User '+ username +' connected');
+  });
+};
 
 module.exports = router;

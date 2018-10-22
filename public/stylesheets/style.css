@@ -1,8 +1,8 @@
-p{
+.heading{
   font-family: 'Lobster', Georgia, Times, serif;
   font-size: 70px;
   line-height: 100px;
- }
+}
   
 .mouse-wrap, .scroll-wrap {
   position: absolute;
@@ -1721,9 +1721,9 @@ a {
 /* Dropdown Button */
 .drop-button {
   background-color: transparent;
-  color: white;
+  color: gray;
   border: none;
-  font-size: 120%;
+  font-size: 130%;
 }
 
 /* The container <div> - needed to position the dropdown content */

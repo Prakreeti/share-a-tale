@@ -6,7 +6,7 @@
     </button>
     <div class="collapse navbar-collapse" id="probootstrap-navbar">
       <ul class="navbar-nav ml-auto">
-        
+        <% if(username){%>
           <div class="dropdown">
             <button class="drop-button">
               <i class="fa fa-user"></i>
@@ -15,10 +15,10 @@
               <a href="/users/friends">Friends</a>
               <a class="user-profile-link">Profile</a>
               <a href="/users/friends">Finder</a>
-              <a href="/users/logout">Log Out</a>
+              <a class="user-logout-link">Log Out</a>
             </div>
           </div>
-        
+        <% } %>
         <li class="nav-item"><a class="nav-link" href="/#section-home">Home</a></li>
         
           <li class="nav-item"><a class="nav-link" href="/#section-signin">SignIn</a></li>
