@@ -19,6 +19,7 @@ router.post('/signup', upload.single('profile_image'), function(req, res) {
   let password = req.body.password;
   if(req.file){
     var profile_image = req.file.buffer.toString('Base64');
+    var image_type =req.file.mimetype;
   }else{
     var profile_image = 'noimage.jpeg';
   }

@@ -9,8 +9,9 @@ router.post("/save_chat", AuthFilter, async (req, res) => {
   try {
     var chat = new Chat(JSON.parse(req.body.chat));
     await chat.save();
-    //Emit the event
-    namespaceArray[chat.to].emit('chatMessage', chat);
+    if(namespaceArray[chat.to] != undefined){
+      namespaceArray[chat.to].emit('chatMessage', chat);
+    }
     res.sendStatus(200);
   } catch (error) {
     res.sendStatus(500);

@@ -14,17 +14,7 @@ $(document).ready(function(){
   }
 
   $("#send").click(() => {
-    toName = $('.active-chat-contact').attr('id').split('-')[1];
-    chat = $("#txtMessage").val();
-    if(chat == ''){
-      $("#txtMessage").css('border-color', 'red');
-    }else{
-      $("#txtMessage").css('border-color', '');
-      var chatMessage = {
-        to: toName, chat: $("#txtMessage").val(), from: username
-      }
-      postChat(chatMessage, username);
-    }
+    sendChatMessage();
   })
 
   function getChats(from, to) {
@@ -108,13 +98,9 @@ $(document).ready(function(){
     $(".messages").animate({ scrollTop: $(document).height() }, "fast");
   };
 
-  $('.submit').click(function() {
-    newMessage();
-  });
-
   $(window).on('keydown', function(e) {
     if (e.which == 13) {
-      newMessage();
+      sendChatMessage();
       return false;
     }
   });
@@ -144,13 +130,13 @@ function postChat(chat, username){
 }
 
 function addChat(chatObj){
-  var activeFriend = $('.active-chat-contact').attr('id').split('-')[1];
+  // var activeFriend = $('.active-chat-contact').attr('id').split('-')[1];
   username = $('.user-name').text();
-  if(chatObj.from.toLowerCase() != username){
-    $("#messages-box-" + chatObj.from).append(`<li class="sent"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p class="wrap-word-in-p">${chatObj.chat}</p></li>`);
+  if(chatObj.from.toLowerCase() == username){
+    $("#messages-box-" + chatObj.to).append(`<li class="replies"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p class="wrap-word-in-p">${chatObj.chat}</p></li>`);
   }
   else{
-    $("#messages-box-" + chatObj.to).append(`<li class="replies"><img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" /><p class="wrap-word-in-p">${chatObj.chat}</p></li>`);
+    $("#messages-box-" + chatObj.from).append(`<li class="sent"><img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" /><p class="wrap-word-in-p">${chatObj.chat}</p></li>`);
   }
   $("#txtName").val('');
   $("#txtMessage").val('');
@@ -164,4 +150,18 @@ function makeUsersOnline(onlineUsersArray){
 
 function makeUserOnline(username){
   $('#contact-' + username).find('.contact-status').addClass('online');
+}
+
+var sendChatMessage = function(){
+  toName = $('.active-chat-contact').attr('id').split('-')[1];
+  chat = $("#txtMessage").val();
+  if(chat == ''){
+    $("#txtMessage").css('border-color', 'red');
+  }else{
+    $("#txtMessage").css('border-color', '');
+    var chatMessage = {
+      to: toName, chat: $("#txtMessage").val(), from: username
+    }
+    postChat(chatMessage, username);
+  }
 }

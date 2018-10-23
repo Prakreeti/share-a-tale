@@ -94,3 +94,4 @@ var server = http.listen(3040, () => {
 })
 
 module.exports = app;
+module.exports.io = io;

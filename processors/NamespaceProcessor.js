@@ -8,12 +8,13 @@ var nameSpaceProcessor = (function () {
 			onlineUserArray.forEach(function(user){
 				namespaceArray[user].emit('newOnlineUser', username);
 			})
-			// namespace.on('disconnect', function(socket){
-			//   namespace.emit('onlineUsers', onlineUserArray);
-			//   onlineUserArray.forEach(function(user){
-			//     namespaceArray[user].emit('newOnlineUser', username);
-			//   })
-			// });
+			socket.on('disconnect', function(socket){
+				onlineUserArray.splice(onlineUserArray.indexOf(username),1);
+				delete namespaceArray[username];
+				onlineUserArray.forEach(function(user){
+					namespaceArray[user].emit('newOfflineUser', username);
+				})
+			});
 		});
 	}
 	function getNameSpace(){
