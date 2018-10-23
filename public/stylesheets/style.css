@@ -1711,12 +1711,6 @@ a {
   color: #fff;
 }
 
-.story{
-  max-width: 100%;
-  min-height:400px;
-  max-height: 400px;
-}
-
 /* hoverable menu for user profile */
 /* Dropdown Button */
 .drop-button {

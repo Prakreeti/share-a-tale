@@ -88,8 +88,14 @@ router.get('/profile/:username', function(req, res, next) {
 
 var createNameSpace = function(username){
   var namespace = io.of('/' + username);
-  namespacearray[username] = namespace;
+  namespaceArray[username] = namespace;
+  // populate user_online_array
+  onlineUserArray << username
   namespace.on('connection', function(socket){
+    namespace.emit('onlineUsers', onlineUserArray);
+    namespaceArray.forEach(function(username){
+      namespaceArray[username].emit('newOnlineUser', username);
+    })
     console.log('User '+ username +' connected');
   });
 };

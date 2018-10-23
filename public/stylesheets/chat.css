@@ -344,6 +344,12 @@
 #frame #sidepanel #contacts::-webkit-scrollbar-thumb {
   background-color: #243140;
 }
+
+#frame #sidepanel #contacts ul {
+  list-style: none;
+  padding: 0;
+}
+
 #frame #sidepanel #contacts ul li.contact {
   position: relative;
   padding: 10px 0 15px 0;
@@ -541,6 +547,7 @@
   max-height: calc(100% - 93px);
   overflow-y: scroll;
   overflow-x: hidden;
+  width: 100%;
 }
 @media screen and (max-width: 735px) {
   #frame .content .messages {
@@ -554,6 +561,7 @@
 #frame .content .messages::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.3);
 }
+
 #frame .content .messages ul li {
   display: inline-block;
   clear: both;

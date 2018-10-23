@@ -10,7 +10,7 @@ router.post("/save_chat", AuthFilter, async (req, res) => {
     var chat = new Chat(JSON.parse(req.body.chat));
     await chat.save();
     //Emit the event
-    io.emit("chat_" + chat.to, req.body);
+    namespacearray[chat.to].emit('chatMessage', chat);
     res.sendStatus(200);
   } catch (error) {
     res.sendStatus(500);
@@ -21,7 +21,7 @@ router.post("/save_chat", AuthFilter, async (req, res) => {
 router.post("/fetch_chats", AuthFilter, (req, res) => {
   from = req.body.from;
   to = req.body.to;
-  Chat.find({}, (error, chats) => {
+  Chat.find({$or: [{from: from, to: to},{from: to, to: from}]}, (error, chats) => {
     res.send(chats)
   })
 })

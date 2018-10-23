@@ -1,5 +1,3 @@
-
-var token;
 var username;
 $(document).ready(function(){
   username = $('.user-name').text();
@@ -9,19 +7,19 @@ $(document).ready(function(){
   $('.contact-profile').append('<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" /><p>'+ from +'</p>');
   if(username != null){
     var socket = io('/' + username);
-    socket.on("chat_" + username, addChat);
+    socket.on("chatMessage", addChat);
     getChats(from, username);
   }
 
   $("#send").click(() => {
-    name = $("#txtName").val();
+    toName = $('.active-chat-contact').attr('id').split('-')[1];
     chat = $("#txtMessage").val();
-    if(name == ''){
-      $("#txtName").css('border-color', 'red');
+    if(chat == ''){
+      $("#txtMessage").css('border-color', 'red');
     }else{
-      $("#txtName").css('border-color', '');
+      $("#txtMessage").css('border-color', '');
       var chatMessage = {
-        to: $("#txtName").val(), chat: $("#txtMessage").val(), from: username
+        to: toName, chat: $("#txtMessage").val(), from: username
       }
       postChat(chatMessage, username);
     }
@@ -134,22 +132,23 @@ function postChat(chat, username){
       }
     },
     error: function(){
-      location.href = 'http://localhost:3040/#section-signin';
+      // location.href = 'http://localhost:3040/#section-signin';
+    },
+    success: function(){
+      addChat(chat);
     }
   });
 }
 
 function addChat(chatObj){
   var activeFriend = $('.active-chat-contact').attr('id').split('-')[1];
-  console.log('active friend is' + activeFriend);
-  $("#messagesBox").append(`<h3 class='text-primary mark'>${chatObj.from} </h3><p class='chat-received'>${chatObj.chat}</p>`);
-  if(chatObj.from == activeFriend){
+  // $("#messagesBox").append(`<h3 class='text-primary mark'>${chatObj.from} </h3><p class='chat-received'>${chatObj.chat}</p>`);
+  if(chatObj.from.toLowerCase() == activeFriend.toLowerCase()){
     $("#messages-box-" + activeFriend).append(`<li class="sent"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>${chatObj.chat}</p></li>`);
   }
   else{
     $("#messages-box-" + activeFriend).append(`<li class="replies"><img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" /><p>${chatObj.chat}</p></li>`);
   }
-  
   $("#txtName").val('');
   $("#txtMessage").val('');
 }
