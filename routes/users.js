@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const AuthProcessor = require('../processors/AuthenticationProcessor');
+const NamespaceProcessor = require('../processors/NamespaceProcessor');
 
 // to handle the profile image
 var multer = require('multer');
@@ -87,17 +88,7 @@ router.get('/profile/:username', function(req, res, next) {
 }); 
 
 var createNameSpace = function(username){
-  var namespace = io.of('/' + username);
-  namespaceArray[username] = namespace;
-  // populate user_online_array
-  onlineUserArray << username
-  namespace.on('connection', function(socket){
-    namespace.emit('onlineUsers', onlineUserArray);
-    namespaceArray.forEach(function(username){
-      namespaceArray[username].emit('newOnlineUser', username);
-    })
-    console.log('User '+ username +' connected');
-  });
+  NamespaceProcessor.createNameSpace(username);
 };
 
 module.exports = router;

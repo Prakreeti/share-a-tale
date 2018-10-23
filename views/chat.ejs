@@ -1,19 +1,4 @@
 <% layout('layout') -%>
-<!-- <div class="container">
-  <br>
-  
-  <div class="jumbotron">
-    <h1 class="display-4">Start Chatting</h1>
-    <br>
-    <input id="txtName" class="form-control" placeholder="Name" type="text">
-    <br>
-    <textarea id="txtMessage" class="form-control" placeholder="Message"></textarea>
-    <br>
-    <button id="send" class="btn btn-success">Send</button>
-  </div>
-  <div id="messagesBox"></div>
-</div> -->
-
 <div class='container'>
 <div id="frame">
   <div id="sidepanel">
@@ -48,9 +33,9 @@
       <% if(friends){ %> 
         <ul>
           <% for (var i=0; i < friends.length; i++){ %>
-            <li class="contact active active-chat-contact" id="<%= 'contact-' + friends[i]['username'] %>">
+            <li class="contact" id="<%= 'contact-' + friends[i]['username'] %>">
               <div class="wrap">
-                <span class="contact-status busy"></span>
+                <span class="contact-status"></span>
                 <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
                 <div class="meta">
                   <p class="name"><%= friends[i]['name'] %></p>

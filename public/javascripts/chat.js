@@ -8,6 +8,8 @@ $(document).ready(function(){
   if(username != null){
     var socket = io('/' + username);
     socket.on("chatMessage", addChat);
+    socket.on("onlineUsers", makeUsersOnline);
+    socket.on("newOnlineUser", makeUserOnline);
     getChats(from, username);
   }
 
@@ -56,8 +58,9 @@ $(document).ready(function(){
     $('.contact-profile').append('<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" /><p>'+ friendName +'</p>');
     $('.messages-box').hide();
     $(this).addClass('active active-chat-contact');
+    $('#messages-box-' + friendName).empty();
     getChats(friendName, username);
-    $('#messages-box-' + friendName).show();
+    $('#messages-box-' + friendName).show(); 
   });
 
   $(".messages").animate({ scrollTop: $(document).height() }, "fast");
@@ -142,14 +145,23 @@ function postChat(chat, username){
 
 function addChat(chatObj){
   var activeFriend = $('.active-chat-contact').attr('id').split('-')[1];
-  // $("#messagesBox").append(`<h3 class='text-primary mark'>${chatObj.from} </h3><p class='chat-received'>${chatObj.chat}</p>`);
-  if(chatObj.from.toLowerCase() == activeFriend.toLowerCase()){
-    $("#messages-box-" + activeFriend).append(`<li class="sent"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>${chatObj.chat}</p></li>`);
+  username = $('.user-name').text();
+  if(chatObj.from.toLowerCase() != username){
+    $("#messages-box-" + chatObj.from).append(`<li class="sent"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p class="wrap-word-in-p">${chatObj.chat}</p></li>`);
   }
   else{
-    $("#messages-box-" + activeFriend).append(`<li class="replies"><img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" /><p>${chatObj.chat}</p></li>`);
+    $("#messages-box-" + chatObj.to).append(`<li class="replies"><img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" /><p class="wrap-word-in-p">${chatObj.chat}</p></li>`);
   }
   $("#txtName").val('');
   $("#txtMessage").val('');
 }
 
+function makeUsersOnline(onlineUsersArray){
+  onlineUsersArray.forEach(function(username){
+    makeUserOnline(username);
+  }) 
+}
+
+function makeUserOnline(username){
+  $('#contact-' + username).find('.contact-status').addClass('online');
+}

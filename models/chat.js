@@ -4,7 +4,6 @@ const chatSchema = mongoose.Schema({
     to: String,
     from: String,
     chat: String
-    
 });
 
 var Chat = mongoose.model('Chat', chatSchema);

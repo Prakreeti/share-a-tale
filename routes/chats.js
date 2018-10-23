@@ -10,7 +10,7 @@ router.post("/save_chat", AuthFilter, async (req, res) => {
     var chat = new Chat(JSON.parse(req.body.chat));
     await chat.save();
     //Emit the event
-    namespacearray[chat.to].emit('chatMessage', chat);
+    namespaceArray[chat.to].emit('chatMessage', chat);
     res.sendStatus(200);
   } catch (error) {
     res.sendStatus(500);
