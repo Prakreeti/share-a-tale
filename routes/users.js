@@ -9,7 +9,8 @@ const NamespaceProcessor = require('../processors/NamespaceProcessor');
 
 // to handle the profile image
 var multer = require('multer');
-var upload = multer({dest:'./uploads'});
+var storage = multer.memoryStorage();
+var upload = multer({storage});
 
 router.post('/signup', upload.single('profile_image'), function(req, res) {
   let name = req.body.name;
@@ -17,7 +18,7 @@ router.post('/signup', upload.single('profile_image'), function(req, res) {
   let username = req.body.username;
   let password = req.body.password;
   if(req.file){
-    var profile_image = req.file.filename;
+    var profile_image = req.file.buffer.toString('Base64');
   }else{
     var profile_image = 'noimage.jpeg';
   }
