@@ -9,8 +9,8 @@ router.post("/save_chat", AuthFilter, async (req, res) => {
   try {
     var chat = new Chat(JSON.parse(req.body.chat));
     await chat.save();
-    if(namespaceArray[chat.to] != undefined){
-      namespaceArray[chat.to].emit('chatMessage', chat);
+    if(io.nsps["/"+chat.to] != undefined){
+      io.nsps["/"+chat.to].emit('chatMessage', chat);
     }
     res.sendStatus(200);
   } catch (error) {
@@ -22,7 +22,7 @@ router.post("/save_chat", AuthFilter, async (req, res) => {
 router.post("/fetch_chats", AuthFilter, (req, res) => {
   from = req.body.from;
   to = req.body.to;
-  Chat.find({$or: [{from: from, to: to},{from: to, to: from}]}, (error, chats) => {
+  Chat.find({$or: [{'from': from, 'to': to},{'from': to, 'to': from}]}, (error, chats) => {
     res.send(chats)
   })
 })
@@ -34,9 +34,12 @@ router.post("/show_chat_window", AuthFilter, (req, res) => {
 
 router.get("/display_chat_window", (req, res) => {
   username = req.query.user;
-  User.find({ username: { $ne: username } }, function(err, friends) {
+  User.findOne({ username: username }, function(err, user) {
     if(err) throw err;
-    res.render('chat', {username: username, friends: friends});
+    User.find({ username: { $ne: username } }, function(err, friends) {
+      if(err) throw err;
+      res.render('chat', {username: username, friends: friends, user: user});
+    });
   });
 });
 

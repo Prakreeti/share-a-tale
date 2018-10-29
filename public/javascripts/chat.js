@@ -4,15 +4,19 @@ $(document).ready(function(){
   firstContact = $('.contact').first();
   $(firstContact).addClass('active active-chat-contact');
   from = $(firstContact).attr('id').split('-')[1];
-  $('.contact-profile').append('<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" /><p>'+ from +'</p>');
+  imgSrc = $(firstContact).find('img').attr('src');
+  $('.contact-profile').append('<img src="" alt="" /><p>'+ from +'</p>');
+  $('.contact-profile').find('img').attr('src', imgSrc);
+
   if(username != null){
     var socket = io('/' + username);
     socket.on("chatMessage", addChat);
     socket.on("onlineUsers", makeUsersOnline);
     socket.on("newOnlineUser", makeUserOnline);
+    socket.on("newOfflineUser", makeUserOffline);
     getChats(from, username);
   }
-
+  scrollMessagesToBottom(from);
   $("#send").click(() => {
     sendChatMessage();
   })
@@ -43,13 +47,17 @@ $(document).ready(function(){
   $('.contact').on('click', function() {
     $('.contact').removeClass('active active-chat-contact');
     friendName = $(this).attr('id').split('-')[1];
-    username = username = $('.user-name').text();
+    username = $('.user-name').text();
+    fullName = $(this).find('.name').text();
+    imgSrc = $(this).find('img').attr('src');
     $('.contact-profile').empty();
-    $('.contact-profile').append('<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" /><p>'+ friendName +'</p>');
+    $('.contact-profile').append('<img src="" alt="" /><p>'+ fullName +'</p>');
+    $('.contact-profile').find('img').attr('src', imgSrc);
     $('.messages-box').hide();
     $(this).addClass('active active-chat-contact');
     $('#messages-box-' + friendName).empty();
     getChats(friendName, username);
+    scrollMessagesToBottom(friendName);
     $('#messages-box-' + friendName).show(); 
   });
 
@@ -83,7 +91,6 @@ $(document).ready(function(){
     } else {
       $("#profile-img").removeClass();
     };
-    
     $("#status-options").removeClass("active");
   });
 
@@ -104,10 +111,36 @@ $(document).ready(function(){
       return false;
     }
   });
-});
-   
-function postChat(chat, username){
-  console.log(chat);
+
+  $('#search-text').on('keyup', function(){
+    if($(this).val() != null && $(this).val() != ''){
+      var searchVal = $(this).val();
+      console.log(searchVal);
+      $('.name').each(function(){
+        if($(this).text().trim().toLowerCase().includes(searchVal.toLowerCase())){
+          $(this).closest('.contact').removeClass('hidden');
+        }
+        else{
+          $(this).closest('.contact').addClass('hidden');
+        }
+      });  
+    }
+    else{
+      $('.name').each(function(){ 
+        $(this).closest('.contact').removeClass('hidden');
+      });
+    }
+    if($('#contacts ul').children(".contact:visible").length == 0){
+      $('.no-contacts-found').removeClass('hidden');
+    }
+    else{
+      $('.no-contacts-found').addClass('hidden');
+    }
+  });
+  
+});//document.ready ends here
+
+var  postChat = function(chat, username){
   $.ajax({
     url: '/chats/save_chat',
     method: 'POST',
@@ -129,27 +162,38 @@ function postChat(chat, username){
   });
 }
 
-function addChat(chatObj){
+var addChat = function(chatObj){
   // var activeFriend = $('.active-chat-contact').attr('id').split('-')[1];
   username = $('.user-name').text();
   if(chatObj.from.toLowerCase() == username){
-    $("#messages-box-" + chatObj.to).append(`<li class="replies"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p class="wrap-word-in-p">${chatObj.chat}</p></li>`);
+    imgSrc = $('#profile-img').attr('src');
+    $("#messages-box-" + chatObj.to).append(`<li class="replies"><img src="" alt="" /><p class="wrap-word-in-p">${chatObj.chat}</p></li>`);
+    $('.replies').find('img').attr('src', imgSrc);
   }
   else{
-    $("#messages-box-" + chatObj.from).append(`<li class="sent"><img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" /><p class="wrap-word-in-p">${chatObj.chat}</p></li>`);
+    imgSrc = $('#contact-' + chatObj.from).find('img').attr('src');
+    $("#messages-box-" + chatObj.from).append(`<li class="sent"><img src="" alt="" /><p class="wrap-word-in-p">${chatObj.chat}</p></li>`);
+    $('.sent').find('img').attr('src', imgSrc);
   }
   $("#txtName").val('');
   $("#txtMessage").val('');
 }
 
-function makeUsersOnline(onlineUsersArray){
+var makeUsersOnline = function(onlineUsersArray){
   onlineUsersArray.forEach(function(username){
     makeUserOnline(username);
   }) 
 }
 
-function makeUserOnline(username){
+var makeUserOnline = function(username){
   $('#contact-' + username).find('.contact-status').addClass('online');
+}
+
+var makeUserOffline = function(username){
+  console.log('offline here');
+  contactStatus = $('#contact-' + username).find('.contact-status');
+  $(contactStatus).removeClass('online');
+  $(contactStatus).addClass('offline');
 }
 
 var sendChatMessage = function(){
@@ -164,4 +208,9 @@ var sendChatMessage = function(){
     }
     postChat(chatMessage, username);
   }
+}
+
+var scrollMessagesToBottom = function(friendName){
+  messageDiv = $('#messages-box-' + friendName);
+  $(messageDiv).scrollTop($(messageDiv).scrollHeight);
 }

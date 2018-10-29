@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  console.log('++++++++++');
+  console.log(req.cookies);
   res.render('index', { title: 'Tell-A-tale', errors: [], username: ''});
 });
 

@@ -3,14 +3,13 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
-const jwt = require('jsonwebtoken');
 const AuthProcessor = require('../processors/AuthenticationProcessor');
 const NamespaceProcessor = require('../processors/NamespaceProcessor');
 
 // to handle the profile image
-var multer = require('multer');
-var storage = multer.memoryStorage();
-var upload = multer({storage});
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({storage});
 
 router.post('/signup', upload.single('profile_image'), function(req, res) {
   let name = req.body.name;
@@ -18,10 +17,10 @@ router.post('/signup', upload.single('profile_image'), function(req, res) {
   let username = req.body.username;
   let password = req.body.password;
   if(req.file){
-    var profile_image = req.file.buffer.toString('Base64');
-    var image_type =req.file.mimetype;
+    // var profile_image = req.file.toString('base64')
+    var profile_image = req.file.buffer.toString('base64');
   }else{
-    var profile_image = 'noimage.jpeg';
+    var profile_image = '';
   }
 
   // form validator

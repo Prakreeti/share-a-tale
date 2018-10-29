@@ -1,18 +1,17 @@
 var nameSpaceProcessor = (function () {
 	function setNameSpace(username) {
 		namespace = io.of('/' + username);
-		namespaceArray[username] = namespace;
 		onlineUserArray.push(username);
 		namespace.on('connection', function(socket){
-			namespace.emit('onlineUsers', onlineUserArray);
+			io.nsps["/"+username].emit('onlineUsers', onlineUserArray);
 			onlineUserArray.forEach(function(user){
-				namespaceArray[user].emit('newOnlineUser', username);
+				io.nsps["/"+user].emit('newOnlineUser', username);
 			})
-			socket.on('disconnect', function(socket){
+			socket.on('disconnect', function(){
 				onlineUserArray.splice(onlineUserArray.indexOf(username),1);
-				delete namespaceArray[username];
+				delete io.nsps["/"+username];
 				onlineUserArray.forEach(function(user){
-					namespaceArray[user].emit('newOfflineUser', username);
+					io.nsps["/"+user].emit('newOfflineUser', username);
 				})
 			});
 		});
