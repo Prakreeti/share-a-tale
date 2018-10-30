@@ -1,53 +1,53 @@
 <% layout('layout') -%>
 
-<section class="pb_section pb_section_v1 text-left cover-bg-opacity-4" style="background-image: url(/images/1900x1200_img_7.jpg)"  data-section="signup" id="section-signup">
-  <div class="container">
-    <% for (var i=0; i < errors.length; i++){ %>
-      <div class='alert alert-danger'><%= errors[i].msg %></div>
-    <% } %>
-    <form method='post' action='/users/signup' enctype="multipart/form-data">
-      <div class='form-group'>
-          <div class='row'><div class='col col-lg-7'><h2 class='font-white'>Sign Up</h2></div></div>
-          <div class=row>
-          <div class='col-lg-6'>
-              <label for='name' class='font-white'>Name:</label>
-              <input class='form-control' name='name' type='text' placeholder='Name'/>
-          </div>
-          <div class='col-lg-6'>
-              <label for='email' class='font-white'>Email:</label>
-              <input class='form-control' name='email' type='email' placeholder='Email'/>
-          </div>
-          </div>  
-      </div>
+<section class="pb_section pb_section_v1 text-left cover-bg-opacity-4" style="background-image: url(/images/1900x1200_img_7.jpg)" data-section="signup" id="section-signup">
+	<div class="container">
+		<div class='row'><div class='col col-lg-7'><h2 class='font-white'>Sign Up</h2></div></div>
+		<form method='post' action='/users/signup' enctype="multipart/form-data">
+			<div class='form-group'>
+				<% for (var i=0; i < errors.length; i++){ %>
+					<div class='alert alert-danger'><%= errors[i].msg %></div>
+				<% } %>
+				<div class=row>
+					<div class='col-lg-6'>
+						<label for='name' class='font-white'>Name:</label>
+						<input class='form-control' name='name' type='text' placeholder='Name'/>
+					</div>
+					<div class='col-lg-6'>
+						<label for='email' class='font-white'>Email:</label>
+						<input class='form-control' name='email' type='email' placeholder='Email'/>
+					</div>
+				</div>  
+			</div>
 
-      <div class='form-group'>
-          <div class=row>
-          <div class='col-lg-6'>
-              <label for='username' class='font-white'>Username:</label>
-              <input class='form-control' name='username' type='text' placeholder='Username'/>
-          </div>
-          <div class='col-lg-6'>
-              <label for='password' class='font-white'>Password:</label>
-              <input class='form-control' name='password' type='password' placeholder='Password'/>
-          </div>
-          </div>
-      </div>
-      <div class='form-group'>
-          <div class=row>
-          <div class='col-lg-6'>
-              <label for='confirm_password' class='font-white'>Confirm Password:</label>
-              <input class='form-control' name='confirm_password' type='password' placeholder=' Confirm Password'/>
-          </div>
-          <div class='col-lg-6'>
-              <label class='font-white'>Profile Image</label>
-              <input class='form-control' type='file' name='profile_image'/>
-          </div>
-          </div>  
-      </div>
-      <div class='form-group'>
-          <button class='btn btn-primary' type='submit' name='submit' value='Register'>REGISTER</button>
-      </div>
-      </form>
-  </div>
+			<div class='form-group'>
+				<div class=row>
+					<div class='col-lg-6'>
+						<label for='username' class='font-white'>Username:</label>
+						<input class='form-control' name='username' type='text' placeholder='Username'/>
+					</div>
+					<div class='col-lg-6'>
+						<label for='password' class='font-white'>Password:</label>
+						<input class='form-control' name='password' type='password' placeholder='Password'/>
+					</div>
+				</div>
+			</div>
+			<div class='form-group'>
+				<div class=row>
+					<div class='col-lg-6'>
+						<label for='confirm_password' class='font-white'>Confirm Password:</label>
+						<input class='form-control' name='confirm_password' type='password' placeholder=' Confirm Password'/>
+					</div>
+					<div class='col-lg-6'>
+						<label class='font-white'>Profile Image</label>
+						<input class='form-control' type='file' name='profile_image'/>
+					</div>
+				</div>  
+			</div>
+			<div class='form-group'>
+				<button class='btn btn-primary' type='submit' name='submit' value='Register'>REGISTER</button>
+			</div>
+		</form>
+	</div>
 </section>
   

@@ -11,7 +11,15 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/chat', function(req, res, next) {
-  res.render('chat', { title: 'Express' });
+  res.render('chat');
+});
+
+router.get('/about', function(req, res, next) {
+  res.render('about', { username: '' });
+});
+
+router.get('/contact', function(req, res, next) {
+  res.render('contact', { username: '' });
 });
 
 module.exports = router;

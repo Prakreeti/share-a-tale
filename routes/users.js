@@ -51,20 +51,28 @@ router.post('/signup', upload.single('profile_image'), function(req, res) {
       console.log(err);
     });
     req.flash('success', 'You are now registered and can login');
-    res.redirect('/#section-signin');
+    res.redirect('/signin');
   }
+});
+
+router.get('/signin', function(req, res, next) {
+  res.render('signin', {username: ''});
+}); 
+
+router.get('/signup', function(req, res, next) {
+  res.render('signup', {username: '', errors: ''});
 });
 
 router.post('/signin', function(req, res){
   User.findOne({username: req.body.username}, function(err, user){
     if(user == null){
       req.flash('error', 'Username is not valid');
-      res.redirect('/#section-signin');
+      res.redirect('/signin');
     }else{
       bcrypt.compare(req.body.password, user.password, function(err, result){
         if(!result) {
           req.flash('error', 'Wrong password entered');
-          res.redirect('/#section-signin');
+          res.redirect('/signin');
         }else{
           username = user.username;
           var JWTToken = new AuthProcessor().createToken(user.email, username);

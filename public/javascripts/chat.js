@@ -17,6 +17,7 @@ $(document).ready(function(){
     getChats(from, username);
   }
   scrollMessagesToBottom(from);
+  
   $("#send").click(() => {
     sendChatMessage();
   })
@@ -190,7 +191,6 @@ var makeUserOnline = function(username){
 }
 
 var makeUserOffline = function(username){
-  console.log('offline here');
   contactStatus = $('#contact-' + username).find('.contact-status');
   $(contactStatus).removeClass('online');
   $(contactStatus).addClass('offline');
@@ -211,6 +211,10 @@ var sendChatMessage = function(){
 }
 
 var scrollMessagesToBottom = function(friendName){
+  // alert('here');
   messageDiv = $('#messages-box-' + friendName);
-  $(messageDiv).scrollTop($(messageDiv).scrollHeight);
+  $('.messages').animate({
+    scrollTop: $(messageDiv).offset().top
+  }, 2000);
+  // $(messageDiv).scrollTop($(messageDiv).scrollHeight);
 }
